@@ -1,6 +1,6 @@
+import java.io.*;
 import java.net.*;
 import java.util.Scanner;
-import java.io.*;
 
 public class Client
 {
@@ -20,11 +20,21 @@ public class Client
         {
             System.out.print("Enter your name: ");
             String username = scanner.nextLine();
-
             output.writeUTF(username);
 
-            String serverMessage = input.readUTF();
-            System.out.println(serverMessage);
+            while (true)
+            {
+                String serverMessage = input.readUTF();
+                System.out.println(serverMessage);
+
+                // Check if the socket is closed
+                if (input.read() == Server.CLOSED) break;
+
+                String clientMessage = scanner.nextLine();
+                output.writeUTF(clientMessage);
+            }
+
+            System.out.println("Connection has been closed");
         }
         catch (IOException e)
         {
